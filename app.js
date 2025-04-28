@@ -19,6 +19,7 @@ app.use('/api',userRoute);
 app.use('/p',productRoute);
 app.use('/uploads',express.static(path.join(__dirname,"uploads")))
 
+
 // to run server
 app.listen(port,()=>{
     console.log(`Server is up and running in ${port}`)

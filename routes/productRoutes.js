@@ -30,4 +30,43 @@ router.get('/',async(req,res)=>{
      res.status(500).send({message:"Internal server error"})   
     }
 })
+
+router.put('/:id',upload.single("image"),async(req,res)=>{
+    try {
+        const {id} = req.params
+        const {pname,price,stock,discription} = req.body
+        const updatePro = {
+        pname,
+        price,
+        stock,
+        discription,
+        }
+        if(req.file){
+            // if new image is uploaded while updating the product give the path
+            updatePro.images = [req.file.filename];
+        }
+        const product = await pModel.findByIdAndUpdate(id,updatePro);
+        if(!product){
+            return res.status(404).send({message:"Product not found"})    
+        }
+        res.status(200).send({message:"Product updated successfully"})
+    } catch (error) {
+        res.status(500).send({message:"Internal server error"})
+        
+    }
+})
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await pModel.findByIdAndDelete(id);
+        if (!product) {
+            return res.status(404).send({ message: "Product not found" });
+        }  
+        res.status(200).send({ message: "Product deleted successfully" });
+    } catch (error) {
+        res.status(500).send({ message: "Internal server error" });
+    }
+});
+
 module.exports= router
